@@ -1,5 +1,6 @@
 //Programa: Leitura e gravacao de cartoes RFID
-//Autor: FILIPEFLOP
+//Autor: FelipeFlop
+//Modificado por: Lucas Ferraz Schlemper
 
 #include <SPI.h>
 #include <MFRC522.h>
@@ -66,11 +67,6 @@ void setup()
 
 void loop()
 {
-
-  //String checkUPinicial;
-  //String checkUP;                         //recebe string que cancela modo de leitura ou gravação
-  //boolean checkUPmodoLeitura = false;     //checar o que é recebido pela serial em modo leitura
-  //boolean checkUPmodoGravacao = false;
 
   delay(100);
 
@@ -185,49 +181,16 @@ void modo_leitura()
       conteudo.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
       conteudo.concat(String(mfrc522.uid.uidByte[i], HEX));
     }
-    //Serial.println();
     conteudo.toUpperCase();
     for (int i = 0; i < 3; i++) {
       if (conteudo.substring(1) == db.listaUID[i]) //Lendo chaveiros
       {
-        //Serial.println("Este é o conteudo: " + conteudo);
+        //Serial.println("Este é o conteudo: " + conteudo); //Para exibir o conteudo sem a utilização do processing
         Serial.write(db.codigo[i]);
       }
     }//FINAL DO FOR
 
-    //ESTE SERIA O FINAL DO IF, APAGAR SE USAR ESTE METODO E COLOCAR ANTES DO FINAL DO FOR TAMBEM REMOVENDO A PARTE DO ELSE IF
-    /* PARTE NAO USADA NESTE PROJETO MAS NAO APAGAR
-      Serial.println("");
-      Serial.println("Ola " + db.nome[i]);
-      Serial.println("Acesso liberado!");
-      Serial.write("teste");
-      lcd.clear();
-      lcd.setCursor(0,0);
-      lcd.print("Ola " + db.nome[i]);
-      lcd.setCursor(0,1);
-      lcd.print("Acesso liberado!");
-      delay(1500);
-      mensageminicial();
-      checarEstado = 0;
-      break;
-      }else{
-      checarEstado += 1;
-      }
-      if(checarEstado == 3){
-      Serial.println("ID nao reconhecido!");
-      Serial.println("Acesso negado!");
-      lcd.clear();
-      lcd.setCursor(0,0);
-      lcd.print("ID Invalido");
-      lcd.setCursor(0,1);
-      lcd.print("Acesso negado!");
-      delay(1500);
-      checarEstado = 0;
-      mensageminicial();
-      }*/
-
-
-
+    
     //Obtem os dados do setor 1, bloco 4 = Nome
     byte sector         = 1;
     byte blockAddr      = 4;
@@ -350,12 +313,7 @@ void modo_gravacao()
     delay(100);
     if (Serial.available() > 0) {
       if (Serial.readString() == "cancelarModoL/G") {
-        //checkUPmodoGravacao = false;
-        //checkUPinicial = "";
-        //checkUPsair = true;
-        //habilitarEscrita = true;
         lcd.clear();
-        //mensageminicial();
         asm volatile (" jmp 0");
       }
     }
@@ -381,37 +339,13 @@ void modo_gravacao()
   byte buffer[34];
   byte block;
   byte status, len;
-
-  //Serial.setTimeout(30000L) ;
-  //Serial.println(F("Digite o sobrenome,em seguida o caractere #"));
   lcd.clear();
-  //lcd.print("Digite o sobreno");
-  //lcd.setCursor(0, 1);
-  //lcd.print("me + #");
-  //len = Serial.readBytesUntil('#', (char *) buffer, 30) ;
   lcd.print("Aguardando");
   lcd.setCursor(0, 1);
   lcd.print("Sobrenome");
-  //boolean process = false;
-
-
-
-  /*
-    while (process != true){
-    if( Serial.read() > 0 && Serial.read() != '#'){
-     len += Serial.readBytesUntil('#', (char *) buffer, 30);
-     process = true;
-    }
-    }
-  */
-
   len = 0;
   Serial.setTimeout(20000L);
-  //len += Serial.readBytesUntil('#', (char *) buffer, 30);
   len = Serial.readBytesUntil('#', (char *) buffer, 30);
-  //len = Serial.read();
-
-
   lcd.clear();
   lcd.print("Sobrenome");
   lcd.setCursor(0, 1);
@@ -454,28 +388,14 @@ void modo_gravacao()
     Serial.println(mfrc522.GetStatusCodeName(status));
     return;
   }
-
-  //Serial.println(F("Digite o nome, em seguida o caractere #"));
+  
   lcd.clear();
   lcd.print("Aguardando");
   lcd.setCursor(0, 1);
   lcd.print("Nome");
-  //len = Serial.readBytesUntil('#', (char *) buffer, 20);
-
-  /*
-    process = false;
-    while (process != true)
-    if(Serial.read() > 0 && Serial.read() != '#'){
-    len += Serial.readBytesUntil('#', (char *) buffer, 20);
-    process = true;
-    }
-  */
-
   len = 0;
   Serial.setTimeout(20000L);
-  //len += Serial.readBytesUntil('#', (char *) buffer, 20);
   len = Serial.readBytesUntil('#', (char *) buffer, 20);
-  //len += Serial.read();
 
   for (byte i = len; i < 20; i++) buffer[i] = ' ';
 
@@ -531,10 +451,6 @@ void modo_gravacao()
   mfrc522.PICC_HaltA(); // Halt PICC
   mfrc522.PCD_StopCrypto1();  // Stop encryption on PCD
   delay(1500);
-  //mensageminicial();
-
-  //break;
-  //} //FINAL DO WHILE
   asm volatile ("  jmp 0"); //reset
 }//FINAL DO VOID DE GRAVACAO
 
