@@ -40,11 +40,6 @@ int posX, posY = 0; //posicoes da tela
 
 int statusInicial = 0;
 
-//modo antigo, utilizando classe instanciada para carregar as imagens
-  //PImage Lucas;
-  //PImage Diego;
-  //PImage Logo;
-
 long lastTime = 0; //ultimo tempo lido, usado para temporizar o programa
 
 int cartaoLido = 0; //serve para indicar se a leitura ja foi realizada, quantidade de cartões lidos
@@ -59,8 +54,8 @@ boolean aguardarSaida = true;
 
 
 //                                                        PARA O ARDUINO
-//para fazer de forma correta o metodo de gravação fazer um while((Serial.read() != *alguma coisa*) || (statusMetodo == "ok"))
-//entao o programa pode ser cancelado no meio da operacao ou no final se tudo correr bem o statusMetodo receber "ok" lembrando que
+//para fazer de forma correta o metodo de gravação segue um while((Serial.read() != *alguma coisa*) || (statusMetodo == "ok"))
+//de forma que o programa pode ser cancelado no meio da operacao ou no final, se tudo correr bem e o statusMetodo recebera "ok", lembrando que
 //toda vez que status for "ok" ele deve ser alterado apos sair do while.
 //Utilizar essa função para ler a string para o Arduino Serial.readString() 
 
@@ -85,28 +80,6 @@ public void setup()
   background(0);
   background(pim.carregarImagemInicial());
   
-  
-  //size(800, 800); //Define o tamanho da tela
-  
-  
-  //Remover comentarios se não utilizar a classe para multimodo
-  //Carrega as imagens e armazena elas em suas respectivas instâncias
-  //Lucas = loadImage("megaMan.jpg");
-  //Diego = loadImage("");
-  //Logo = loadImage("logo.jpg");
-  //==============================================================*/
-  
-  //inicia a tela com logo, desenhar nova tela com botoes
-  //translate(width/2, height/2);
- /*
- cp5 = new ControlP5(this);
-  cp5.addButton("teste")
-     .setValue(0)
-     .setPosition(100,100)
-     .setSize(200,20)
-     ;
-  */
-  
 }
 
 
@@ -120,37 +93,6 @@ public void draw(){
   
   ProcessamentoImagens pim = new ProcessamentoImagens();
   ListaDeDados ldd = new ListaDeDados();
-  
-
-  //CONSIDERAÇÔES DO PROJETO
-  //AQUI VAI O MENU
-  //Criar o menu de forma que consiga via função mouseClicked() que roda independente, iniciar a partir de botoes,
-  //esses botoes devem ter nomes diferentes, suas funções é ficar alterando variaveis booleans de estado para verfificar o estado da situação, 
-  //no void draw() criar if condicionais que receber esses estados(status ou situação atual) para iniciar uma parte do codigo
-  //o padrao dos botoes sera btn ou botao, seguido do nome do que ele faz, exemplo de codigo sem saber como funciona o mouse clicked ainda
-  //
-  //  no mouse clicked com o clique do mouse sobre o botao btnIniciarLeituraPassiva ele retorna estadoModoLeitura = true
-  //  no draw um if aguarda essa variavel ser iniciada como true considerando que ele seja carregada no inicio como false
-  //  while(estadoLeituraPassiva == true){ inicia o codigo da leitura serial que esta logo abaixo }
-  //
-  //  para sair deste while um botao sairLeituaPassiva deve estar na tela e somente na tela de leituraPassiva para quando clicado o estadoLeituraPassiva receber false e
-  //  não operar o while que faz a parte correspondente
-  //
-  //  fazer o programa depender assim como o este de uma verificação serial de dados para iniciar outros "ifs" da vida:
-  //
-  //     if(Serial.available()> 0) //Se algo for recebido pela serial
-  //      {
-  //        valor_recebido = Serial.read(); //Armazena o que foi recebido na variável valor_recebido
-  //
-  //        if(valor_recebido == dado que eu desejo){faz leitura em modo passivo, ou pode fazer gravação}
-  //
-  //  implemetar isso para todas as situações, que são: - Modo de leitura passiva, depender da serial para ativar a leitura de dados atraves de uma flag,
-  //                                                    - Modo de gravação agora pela serial, descartar o programa de modo somente leitura se a implementação der certo(eu espero)
-  //                                                      e utilizar o programa de modo leitura gravação, mas agora com os botoes virtuais, sendo que o arduino deve receber 
-  //                                                      pela serial uma flag "valorRecebido = Serial.read() "que autoriza dentro de um if começar o programa
-  //                                                      agora todo o programa dependera disso, inclusive o modo leitura dependera da flag, mas agora como o modo de leitura
-  //                                                      do programa So_Ler só retornava a UID e comparava, o modo Le_Escreve le a UID e tambem um char que é o nome
-  //                                                      da pra continuar usando o ID como ponto de referencia entre as tabelas de dados
   
   
   //MODO MOUSE PRESSED PARA SAIR
@@ -172,7 +114,6 @@ public void draw(){
     valorRecebido = myPort.read(); //Armazena o que foi lido dentro da variável valor recebido
   
   if(estadoModoLeitura == true){
-  //multi modo de leitura com classe instanciada
   
   for(int i = 0; i < 2; i++){
       if(valorRecebido == ldd.listaCodigoRecebido[i] && cartaoLido < 16){
@@ -184,8 +125,7 @@ public void draw(){
             posX = 0;
           }
         lastTime = millis(); //recebe o ultimo tempo lido
-        ++cartaoLido; //sai fora do if quando cartãoLido++ 
-        
+        ++cartaoLido; //sai fora do if quando cartãoLido++  
     }
     }
     }
@@ -216,19 +156,6 @@ public void draw(){
   listaCodigoRecebido[1] = 1;
   */
   
-  //===============================================================
-    //Não deletar, este é o mono modo de leitura, descomentar se for utilizado
-    /*
-    for(int i = 0; i < 3; i++){
-      while(valorRecebido == listaCodigoRecebido[i] && status == 0){
-        background(im.checarId(listaCodigoRecebido));
-        lastTime = millis(); //recebe o ultimo tempo lido
-        status = 1;
-      }
-    }
-  }
-  */
-  //================================================================
   
 }
 
