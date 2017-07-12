@@ -1,9 +1,3 @@
-//codigo beta, refatorar o mesmo após terminar
-//tela de 1346x1022
-//metade da horizontal = 673
-//metade da vertical = 511
-
-
 import controlP5.*;
 import cc.arduino.*;
 import processing.serial.*; //Importa a biblioteca para abrir uma comunicação Serial
@@ -32,11 +26,7 @@ String sobrenome, nome = "";
 
 int valorRecebido; //Cria uma variável para armazenas o valor recebido pela seria
 
-//int codeLucas = 0;
-
 int posX, posY = 0; //posicoes da tela
-
-//int posAux = 0; //auxiliar da posicao da tela
 
 int statusInicial = 0;
 
@@ -50,11 +40,8 @@ boolean estadoSairDoPrograma = true;
 boolean aguardarSaida = true;
 
 
-
-
-
 //                                                        PARA O ARDUINO
-//para fazer de forma correta o metodo de gravação segue um while((Serial.read() != *alguma coisa*) || (statusMetodo == "ok"))
+//para fazer de forma correta o metodo de gravação segue um while((Serial.read() != *value*) || (statusMetodo == "ok"))
 //de forma que o programa pode ser cancelado no meio da operacao ou no final, se tudo correr bem e o statusMetodo recebera "ok", lembrando que
 //toda vez que status for "ok" ele deve ser alterado apos sair do while.
 //Utilizar essa função para ler a string para o Arduino Serial.readString() 
@@ -63,17 +50,13 @@ public void setup()
 {
 
   fullScreen();
-  
-  
   lastTime = millis();
-  
   String portName = Serial.list()[0]; //Lista as portas COM (Serial) encontradas
                                       //Pega a primeira porta (Posição 0 em "Serial.list()[0]" e
                                       //armazena na variável portName
                                       //Se você tiver mais de uma porta COM, identifique qual a do Garagino/Arduino 
   
   myPort = new Serial(this, portName, 9600); //Abre uma comunicação Serial com baud rate de 9600
-  
   
   ProcessamentoImagens pim = new ProcessamentoImagens();
   
